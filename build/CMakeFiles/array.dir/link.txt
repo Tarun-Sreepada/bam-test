@@ -1,0 +1,1 @@
+/usr/bin/g++ @CMakeFiles/array.dir/objects1.rsp CMakeFiles/array.dir/cmake_device_link.o -o bin/array @CMakeFiles/array.dir/linkLibs.rsp -L"/usr/local/cuda-12.6/targets/x86_64-linux/lib/stubs" -L"/usr/local/cuda-12.6/targets/x86_64-linux/lib"

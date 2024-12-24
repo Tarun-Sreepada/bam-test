@@ -1,0 +1,36 @@
+
+Using GPU Device 0: NVIDIA H100 PCIe | PCIe Bus ID: 0000:03:00.0
+
+Available NVMe Controllers:
+0: /dev/libnvm0
+
+Using NVMe Controller: /dev/libnvm0
+
+===== Configuration Parameters =====
+GPU Device ID     : 0
+GPU Name          : NVIDIA H100 PCIe
+GPU PCIe Bus ID   : 0000:03:00.0
+NVMe Controller   : /dev/libnvm0
+Queue Depth       : 8
+Number of Queues  : 4
+Threads per Block : 2
+Number of Blocks  : 2
+Page Size         : 4096 bytes
+IO Type           : READ
+IO Method         : RANDOM
+Number of IO Req. : 100000
+====================================
+
+SQs: 256	CQs: 256	n_qps: 4
+n_ranges_bits: 6
+n_ranges_mask: 63
+pages_dma: 0x7fbf34710000	5c001510000
+HEREN
+Cond1
+4 8 1 10
+Finish Making Page Cache
+Kernel execution time: 17158.640625 ms
+Data transferred:      1562.500000 MB
+Bandwidth:             91.061992 MB/s
+Throughput:            23311.870022 IOPS
+\n--- STDERR ---\n

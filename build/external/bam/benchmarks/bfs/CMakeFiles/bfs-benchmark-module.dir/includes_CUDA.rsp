@@ -1,0 +1,1 @@
+-I"/export/home1/ltarun/bam-test/build/external/bam/include" -I"/export/home1/ltarun/bam-test/external/bam/include" -I"/export/home1/ltarun/bam-test/external/bam/include/freestanding/include" -I"/usr/local/cuda-12.6/include"
