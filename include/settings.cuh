@@ -524,6 +524,7 @@ inline void print_settings(const Settings& settings) {
     std::cout << "Number of Queues  : " << settings.num_queues << std::endl;
     std::cout << "Threads per Block : " << settings.block_size << std::endl;
     std::cout << "Number of Blocks  : " << settings.num_blocks << std::endl;
+    std::cout << "Total Threads     : " << settings.block_size * settings.num_blocks << std::endl;
     std::cout << "Page Size         : " << settings.page_size << " bytes" << std::endl;
     std::cout << "IO Type           : " << (settings.io_type == READ ? "READ" : "WRITE") << std::endl;
     std::cout << "IO Method         : " << (settings.io_method == SEQUENTIAL ? "SEQUENTIAL" : "RANDOM") << std::endl;

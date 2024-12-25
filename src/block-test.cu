@@ -39,7 +39,7 @@ __global__ void read_kernel(Controller **controllers,
         //---------------------------------------------------------
         // This is a simple example that tries to vary the offset
         // used by each iteration, but you can pick your approach.
-        int index_into_offsets = (tid + i) % (num_offsets);
+        int index_into_offsets = (tid * num_requests + i) % (num_requests);
 
         // 2) Retrieve the byte offset from offsets array
         uint32_t offset_bytes = offsets[index_into_offsets] * page_size;
