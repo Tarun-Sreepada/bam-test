@@ -3,10 +3,10 @@ import subprocess
 from itertools import product
 
 # Define the range of parameters
-queue_depths = [2, 4, 8]
-num_queues = [1, 2, 4]
-block_sizes = [1, 2, 4]
-num_blocks = [1,2,4,8]
+queue_depths = [1024]
+num_queues = [1]
+block_sizes = [4]
+num_blocks = [512]
 page_sizes = [4096]
 io_types = [0]
 io_methods = [1]
