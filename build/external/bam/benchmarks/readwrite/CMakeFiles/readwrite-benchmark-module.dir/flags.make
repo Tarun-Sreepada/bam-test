@@ -6,5 +6,5 @@ CUDA_DEFINES = -D__CUDA__
 
 CUDA_INCLUDES = --options-file CMakeFiles/readwrite-benchmark-module.dir/includes_CUDA.rsp
 
-CUDA_FLAGS = -std=c++14 "--generate-code=arch=compute_80,code=[compute_80,sm_80]"
+CUDA_FLAGS = -O3 -std=c++14 "--generate-code=arch=compute_80,code=[compute_80,sm_80]"
 

@@ -259,6 +259,7 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
   /usr/include/x86_64-linux-gnu/bits/errno.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
   /usr/include/x86_64-linux-gnu/bits/fcntl.h \
+  /usr/include/x86_64-linux-gnu/bits/fcntl2.h \
   /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
   /usr/include/x86_64-linux-gnu/bits/floatn.h \
   /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
@@ -289,6 +290,7 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/semaphore.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stat.h \
@@ -296,8 +298,14 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
   /usr/include/x86_64-linux-gnu/bits/statx.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
+  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
+  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
@@ -338,10 +346,12 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
@@ -490,8 +500,6 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
 
 /usr/local/cuda-12.6/targets/x86_64-linux/include/crt/common_functions.h:
 
-/usr/local/cuda-12.6/targets/x86_64-linux/include/channel_descriptor.h:
-
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h:
@@ -538,6 +546,8 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
 
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 
+/usr/include/x86_64-linux-gnu/bits/unistd.h:
+
 /usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
@@ -566,8 +576,6 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
 
 /usr/include/x86_64-linux-gnu/bits/types.h:
 
-/usr/include/x86_64-linux-gnu/bits/timesize.h:
-
 /usr/local/cuda-12.6/targets/x86_64-linux/include/vector_functions.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/time64.h:
@@ -584,9 +592,17 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
 
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
 
+/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
+
 /usr/include/x86_64-linux-gnu/bits/timex.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
+
+/usr/local/cuda-12.6/targets/x86_64-linux/include/channel_descriptor.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
 
@@ -651,6 +667,8 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
 /usr/include/x86_64-linux-gnu/bits/getopt_ext.h:
 
 /usr/include/x86_64-linux-gnu/bits/getopt_core.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar2.h:
 
 /usr/include/x86_64-linux-gnu/bits/fp-logb.h:
 
@@ -818,6 +836,8 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
 
 /export/home1/ltarun/bam-test/external/bam/include/freestanding/libcxx/include/type_traits:
 
+/usr/include/x86_64-linux-gnu/bits/select2.h:
+
 /usr/include/c++/11/cwchar:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h:
@@ -861,6 +881,10 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
 /export/home1/ltarun/bam-test/external/bam/include/ctrl.h:
 
 /usr/include/c++/11/bits/ios_base.h:
+
+/usr/include/x86_64-linux-gnu/bits/timesize.h:
+
+/usr/include/x86_64-linux-gnu/bits/fcntl2.h:
 
 /export/home1/ltarun/bam-test/external/bam/include/freestanding/libcxx/include/ratio:
 
@@ -926,6 +950,10 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
 
 /export/home1/ltarun/bam-test/external/bam/include/freestanding/libcxx/include/cstdint:
 
+/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
+
+/export/home1/ltarun/bam-test/src/array.cu:
+
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h:
 
 /export/home1/ltarun/bam-test/external/bam/include/page_cache.h:
@@ -960,7 +988,11 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
 
 /export/home1/ltarun/bam-test/external/bam/include/freestanding/libcxx/include/__undef_macros:
 
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
+
 /usr/include/c++/11/memory:
+
+/usr/include/x86_64-linux-gnu/bits/stdlib.h:
 
 /export/home1/ltarun/bam-test/external/bam/include/nvm_admin.h:
 
@@ -1033,6 +1065,8 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
 /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
 
 /usr/include/c++/11/bits/stl_bvector.h:
 
@@ -1211,10 +1245,6 @@ CMakeFiles/array.dir/src/array.cu.o: /export/home1/ltarun/bam-test/src/array.cu 
 /usr/include/stdint.h:
 
 /usr/include/linux/posix_types.h:
-
-/export/home1/ltarun/bam-test/src/array.cu:
-
-/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
 
 /usr/include/c++/11/bits/refwrap.h:
 

@@ -75,6 +75,8 @@ struct Settings
     int block_size = 0;
     int num_blocks = 0;
 
+    bool clock = false;
+
     // Page Size
     int page_size = 4096; // Default value
 
@@ -223,6 +225,11 @@ inline Settings parse_arguments(int argc, char** argv) {
                 exit(EXIT_FAILURE);
             }
         }
+        else if (arg == "--clock")
+        {
+            settings.clock = true;
+        }
+
         else if(arg == "--io-method" && i + 1 < argc){
             int temp = std::stoi(argv[++i]);
             if(temp == SEQUENTIAL || temp == RANDOM){

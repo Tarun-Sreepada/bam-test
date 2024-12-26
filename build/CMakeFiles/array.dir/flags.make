@@ -6,5 +6,5 @@ CUDA_DEFINES =
 
 CUDA_INCLUDES = --options-file CMakeFiles/array.dir/includes_CUDA.rsp
 
-CUDA_FLAGS = -std=c++14 "--generate-code=arch=compute_80,code=[compute_80,sm_80]"
+CUDA_FLAGS = -O3 -std=c++14 "--generate-code=arch=compute_80,code=[compute_80,sm_80]" -O3
 
