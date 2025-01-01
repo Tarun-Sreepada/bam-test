@@ -1,0 +1,28 @@
+
+===== Configuration Parameters =====
+GPU Device ID     : 0
+GPU Name          : NVIDIA H100 PCIe
+GPU PCIe Bus ID   : 0000:03:00.0
+NVMe Controller   : /dev/libnvm0
+Queue Depth       : 1024
+Number of Queues  : 1
+Threads per Block : 1
+Number of Blocks  : 8388608
+Total Threads     : 8388608
+Page Size         : 1024 bytes
+SSD Space Used    : 3500 GB
+SSD Pages         : 3670016000
+IO Type           : WRITE
+IO Method         : RANDOM
+#io per thread    : 1
+Total IO ops      : 8388608
+Total data size   : 8 GB
+====================================
+
+Kernel execution time: 47258.3 ms
+Data transferred:      8192 MB
+Bandwidth:             173.345 MB/s
+Throughput:            177505 IOPS
+
+--- STDERR ---
+Not enough GPU memory pages for the number of threads. Adjusting the number of pages to the number of threads

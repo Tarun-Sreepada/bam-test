@@ -162,43 +162,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named array_noclock
+# Target rules for targets named block-test
 
 # Build rule for target.
-array_noclock: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 array_noclock
-.PHONY : array_noclock
+block-test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 block-test
+.PHONY : block-test
 
 # fast build rule for target.
-array_noclock/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/array_noclock.dir/build.make CMakeFiles/array_noclock.dir/build
-.PHONY : array_noclock/fast
-
-#=============================================================================
-# Target rules for targets named array_clock
-
-# Build rule for target.
-array_clock: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 array_clock
-.PHONY : array_clock
-
-# fast build rule for target.
-array_clock/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/array_clock.dir/build.make CMakeFiles/array_clock.dir/build
-.PHONY : array_clock/fast
-
-#=============================================================================
-# Target rules for targets named block-test_noclock
-
-# Build rule for target.
-block-test_noclock: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 block-test_noclock
-.PHONY : block-test_noclock
-
-# fast build rule for target.
-block-test_noclock/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/block-test_noclock.dir/build.make CMakeFiles/block-test_noclock.dir/build
-.PHONY : block-test_noclock/fast
+block-test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/block-test.dir/build.make CMakeFiles/block-test.dir/build
+.PHONY : block-test/fast
 
 #=============================================================================
 # Target rules for targets named block-test_clock
@@ -590,39 +564,12 @@ vectoradd-benchmark/fast:
 	$(MAKE) $(MAKESILENT) -f external/bam/benchmarks/vectoradd/CMakeFiles/vectoradd-benchmark.dir/build.make external/bam/benchmarks/vectoradd/CMakeFiles/vectoradd-benchmark.dir/build
 .PHONY : vectoradd-benchmark/fast
 
-src/array.o: src/array.cu.o
-.PHONY : src/array.o
-
-# target to build an object file
-src/array.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/array_noclock.dir/build.make CMakeFiles/array_noclock.dir/src/array.cu.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/array_clock.dir/build.make CMakeFiles/array_clock.dir/src/array.cu.o
-.PHONY : src/array.cu.o
-
-src/array.i: src/array.cu.i
-.PHONY : src/array.i
-
-# target to preprocess a source file
-src/array.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/array_noclock.dir/build.make CMakeFiles/array_noclock.dir/src/array.cu.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/array_clock.dir/build.make CMakeFiles/array_clock.dir/src/array.cu.i
-.PHONY : src/array.cu.i
-
-src/array.s: src/array.cu.s
-.PHONY : src/array.s
-
-# target to generate assembly for a file
-src/array.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/array_noclock.dir/build.make CMakeFiles/array_noclock.dir/src/array.cu.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/array_clock.dir/build.make CMakeFiles/array_clock.dir/src/array.cu.s
-.PHONY : src/array.cu.s
-
 src/block-test.o: src/block-test.cu.o
 .PHONY : src/block-test.o
 
 # target to build an object file
 src/block-test.cu.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/block-test_noclock.dir/build.make CMakeFiles/block-test_noclock.dir/src/block-test.cu.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/block-test.dir/build.make CMakeFiles/block-test.dir/src/block-test.cu.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/block-test_clock.dir/build.make CMakeFiles/block-test_clock.dir/src/block-test.cu.o
 .PHONY : src/block-test.cu.o
 
@@ -631,7 +578,7 @@ src/block-test.i: src/block-test.cu.i
 
 # target to preprocess a source file
 src/block-test.cu.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/block-test_noclock.dir/build.make CMakeFiles/block-test_noclock.dir/src/block-test.cu.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/block-test.dir/build.make CMakeFiles/block-test.dir/src/block-test.cu.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/block-test_clock.dir/build.make CMakeFiles/block-test_clock.dir/src/block-test.cu.i
 .PHONY : src/block-test.cu.i
 
@@ -640,7 +587,7 @@ src/block-test.s: src/block-test.cu.s
 
 # target to generate assembly for a file
 src/block-test.cu.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/block-test_noclock.dir/build.make CMakeFiles/block-test_noclock.dir/src/block-test.cu.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/block-test.dir/build.make CMakeFiles/block-test.dir/src/block-test.cu.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/block-test_clock.dir/build.make CMakeFiles/block-test_clock.dir/src/block-test.cu.s
 .PHONY : src/block-test.cu.s
 
@@ -673,12 +620,10 @@ help:
 	@echo "... sssp_float-benchmark"
 	@echo "... vectoradd-benchmark"
 	@echo "... array-benchmark-module"
-	@echo "... array_clock"
-	@echo "... array_noclock"
 	@echo "... bfs-benchmark-module"
 	@echo "... block-benchmark-module"
+	@echo "... block-test"
 	@echo "... block-test_clock"
-	@echo "... block-test_noclock"
 	@echo "... cache-benchmark-module"
 	@echo "... cc-benchmark-module"
 	@echo "... iodepth-block-benchmark-module"
@@ -689,9 +634,6 @@ help:
 	@echo "... sssp-benchmark-module"
 	@echo "... sssp_float-benchmark-module"
 	@echo "... vectoradd-benchmark-module"
-	@echo "... src/array.o"
-	@echo "... src/array.i"
-	@echo "... src/array.s"
 	@echo "... src/block-test.o"
 	@echo "... src/block-test.i"
 	@echo "... src/block-test.s"

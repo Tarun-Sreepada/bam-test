@@ -66,24 +66,28 @@ enum IOMethod
 struct Settings
 {
     // CUDA Parameters
-    int device = -1;
+    int64_t device = -1;
     size_t controller_index = 0;
     uint64_t queue_depth = 0;
     uint64_t num_queues = 0;
 
     // Kernel Launch Parameters
-    int block_size = 0;
-    int num_blocks = 0;
-
-    bool clock = false;
+    uint64_t block_size = 0;
+    uint64_t num_blocks = 0;
 
     // Page Size
-    int page_size = 4096; // Default value
+    uint64_t page_size = 512; // Default value
 
     // IO Benchmark Parameters
     IOType io_type = READ;
     IOMethod io_method = SEQUENTIAL;
-    int num_io_requests = 0;
+    uint64_t num_io_requests = 0;
+
+    // Configurable SSD space
+    // We'll store total bytes of the SSD in ssd_page_bytes,
+    // and compute how many 'pages' that equates to later.
+    uint64_t ssd_page_bytes = 0; 
+    uint64_t ssd_pages = 0;      
 
     std::string selected_controller_path = "";
 };
@@ -148,7 +152,7 @@ int get_selection(const std::string &prompt, const std::vector<std::string> &opt
         std::cout << prompt;
         std::cin >> selection;
 
-        if (std::cin.fail() || selection < 0 || selection >= options.size())
+        if (std::cin.fail() || selection < 0 || selection >= static_cast<int>(options.size()))
         {
             std::cin.clear();                                                   // Clear the error flag
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
@@ -162,7 +166,57 @@ int get_selection(const std::string &prompt, const std::vector<std::string> &opt
     }
 }
 
-// Utility Functions
+// ---------------------------------------------------------------------
+// NEW HELPER FUNCTION: parse_ssd_size_string
+// ---------------------------------------------------------------------
+// This function parses a user-provided size string (e.g., "3840 GB") and
+// converts it into bytes. It handles "KB", "MB", "GB", and "TB". 
+// You could extend it to handle more units as needed.
+// ---------------------------------------------------------------------
+inline uint64_t parse_ssd_size_string(const std::string &size_str, const std::string &unit_str)
+{
+    // Convert the numeric portion
+    uint64_t size_value = 0;
+    try
+    {
+        size_value = static_cast<uint64_t>(std::stoull(size_str));
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Error parsing SSD size value: " << e.what() << std::endl;
+        std::cerr << "Defaulting to 3072 GB (3 TB)..." << std::endl;
+        return 3072ULL * 1024ULL * 1024ULL * 1024ULL; // default to 3 TB in bytes
+    }
+
+    // Convert the unit portion to bytes
+    // e.g., "KB" => * 1024, "MB" => * 1024*1024, etc.
+    std::string upper_unit = unit_str;
+    // Convert unit to uppercase for simple comparisons
+    std::transform(upper_unit.begin(), upper_unit.end(), upper_unit.begin(), ::toupper);
+
+    if (upper_unit == "KB")
+    {
+        return size_value * 1024ULL;
+    }
+    else if (upper_unit == "MB")
+    {
+        return size_value * 1024ULL * 1024ULL;
+    }
+    else if (upper_unit == "GB")
+    {
+        return size_value * 1024ULL * 1024ULL * 1024ULL;
+    }
+    else if (upper_unit == "TB")
+    {
+        return size_value * 1024ULL * 1024ULL * 1024ULL * 1024ULL;
+    }
+    else
+    {
+        // Unknown unit => default to 3 TB in bytes
+        std::cerr << "Unrecognized unit for SSD size: " << unit_str << ". Defaulting to 3 TB.\n";
+        return 3072ULL * 1024ULL * 1024ULL * 1024ULL; 
+    }
+}
 
 // Function to list available CUDA devices
 inline void list_cuda_devices() {
@@ -187,6 +241,12 @@ inline void list_cuda_devices() {
 inline Settings parse_arguments(int argc, char** argv) {
     Settings settings;
 
+    // --------------------------
+    // Set a default SSD size here, if you wish:
+    // Example: 1 TB
+    settings.ssd_page_bytes = 1024ULL * 1024ULL * 1024ULL * 1024ULL; 
+    // --------------------------
+
     // Supported values
     std::vector<uint64_t> supported_queue_depths = {128, 256, 512, 1024};
     std::vector<uint64_t> supported_num_queues = {1, 2, 4, 8};
@@ -208,13 +268,13 @@ inline Settings parse_arguments(int argc, char** argv) {
             settings.num_queues = std::stoull(argv[++i]);
         }
         else if(arg == "--block-size" && i + 1 < argc){
-            settings.block_size = std::stoi(argv[++i]);
+            settings.block_size = std::stoull(argv[++i]);
         }
         else if(arg == "--num-blocks" && i + 1 < argc){
-            settings.num_blocks = std::stoi(argv[++i]);
+            settings.num_blocks = std::stoull(argv[++i]);
         }
         else if(arg == "--page-size" && i + 1 < argc){
-            settings.page_size = std::stoi(argv[++i]);
+            settings.page_size = std::stoull(argv[++i]);
         }
         else if(arg == "--io-type" && i + 1 < argc){
             int temp = std::stoi(argv[++i]);
@@ -225,11 +285,6 @@ inline Settings parse_arguments(int argc, char** argv) {
                 exit(EXIT_FAILURE);
             }
         }
-        else if (arg == "--clock")
-        {
-            settings.clock = true;
-        }
-
         else if(arg == "--io-method" && i + 1 < argc){
             int temp = std::stoi(argv[++i]);
             if(temp == SEQUENTIAL || temp == RANDOM){
@@ -240,7 +295,16 @@ inline Settings parse_arguments(int argc, char** argv) {
             }
         }
         else if(arg == "--num-io" && i + 1 < argc){
-            settings.num_io_requests = std::stoi(argv[++i]);
+            settings.num_io_requests = std::stoull(argv[++i]);
+        }
+        // ------------------------------------------------------
+        // NEW ARGUMENT: --ssd-size <value> <unit>
+        // Example usage: --ssd-size 3840 GB
+        // ------------------------------------------------------
+        else if(arg == "--ssd-size" && i + 2 < argc){
+            std::string size_val = argv[++i];   // e.g. "3840"
+            std::string size_unit = argv[++i];  // e.g. "GB"
+            settings.ssd_page_bytes = parse_ssd_size_string(size_val, size_unit);
         }
         else if(arg == "--help" || arg == "-h"){
             std::cout << "Usage: ./io_benchmark [options]\n"
@@ -251,10 +315,11 @@ inline Settings parse_arguments(int argc, char** argv) {
                       << "  --num-queues <value>    Number of queues (1, 2, 4, 8)\n"
                       << "  --block-size <value>    Threads per block\n"
                       << "  --num-blocks <value>    Number of blocks\n"
-                      << "  --page-size <bytes>     Page size (multiple of 4096)\n"
+                      << "  --page-size <bytes>     Page size (multiple of 512)\n"
                       << "  --io-type <0|1>         IO type (0: READ, 1: WRITE)\n"
                       << "  --io-method <0|1>       IO method (0: SEQUENTIAL, 1: RANDOM)\n"
-                      << "  --num-io <value>        Number of IO requests\n";
+                      << "  --num-io <value>        Number of IO requests\n"
+                      << "  --ssd-size <val> <unit> SSD size in e.g. '3840 GB', '3 TB'\n";
             exit(EXIT_SUCCESS);
         }
         else {
@@ -264,6 +329,7 @@ inline Settings parse_arguments(int argc, char** argv) {
     }
 
     // 1. List and Select CUDA Device
+    // (omitted for brevity in this example)
     // list_cuda_devices();
 
     // Get device count
@@ -329,7 +395,6 @@ inline Settings parse_arguments(int argc, char** argv) {
 
     // 4. Discover and Select NVMe Controllers
     std::vector<std::string> accessible_paths;
-
     for (const auto &path : controller_paths)
     {
         if (access(path.c_str(), F_OK) != -1)
@@ -350,9 +415,11 @@ inline Settings parse_arguments(int argc, char** argv) {
         std::cout << i << ": " << accessible_paths[i] << std::endl;
     }
 
-    // If controller index not set via args, prompt the user
-    if(accessible_paths.size() > 1 && settings.controller_index >= accessible_paths.size()){
-        settings.controller_index = InputUtils::get_selection("Enter the index of the controller you want to use: ", accessible_paths);
+    // If controller index not set via args or out of range, prompt user
+    if(settings.controller_index >= accessible_paths.size()){
+        settings.controller_index = InputUtils::get_selection(
+            "Enter the index of the controller you want to use: ", accessible_paths
+        );
     }
     else if(accessible_paths.size() == 1){
         settings.controller_index = 0;
@@ -383,12 +450,6 @@ inline Settings parse_arguments(int argc, char** argv) {
         settings.queue_depth = supported_queue_depths[qd_idx];
     }
     else {
-        // Validate provided queue_depth
-        // if(std::find(supported_queue_depths.begin(), supported_queue_depths.end(), settings.queue_depth) == supported_queue_depths.end()){
-        //     std::cerr << "Invalid queue depth provided via arguments. Exiting." << std::endl;
-        //     exit(EXIT_FAILURE);
-        // }
-
         // queue-depth is positive integer
         if (settings.queue_depth <= 1)
         {
@@ -417,9 +478,8 @@ inline Settings parse_arguments(int argc, char** argv) {
         settings.num_queues = supported_num_queues[nq_idx];
     }
     else {
-        // Validate provided num_queues
         // if less than 1 or not a power of 2
-        if (settings.num_queues <= 0 || (settings.num_queues & (settings.num_queues - 1)) != 0)
+        if ((settings.num_queues & (settings.num_queues - 1)) != 0)
         {
             std::cerr << "Number of queues must be a positive power of 2. Exiting." << std::endl;
             exit(EXIT_FAILURE);
@@ -446,20 +506,20 @@ inline Settings parse_arguments(int argc, char** argv) {
     }
 
     // 7. Set Page Size
-    if(settings.page_size <= 0 || settings.page_size % 4096 != 0){
+    if(settings.page_size <= 0 || settings.page_size % 512 != 0){
         while (true)
         {
-            std::string page_size_str = InputUtils::get_input<std::string>("Enter the page size (multiple of 4096): ");
+            std::string page_size_str = InputUtils::get_input<std::string>("Enter the page size (multiple of 512): ");
             try
             {
-                settings.page_size = std::stoi(page_size_str);
-                if (settings.page_size > 0 && settings.page_size % 4096 == 0)
+                settings.page_size = std::stoull(page_size_str);
+                if (settings.page_size > 0 && settings.page_size % 512 == 0)
                 {
                     break;
                 }
                 else
                 {
-                    std::cerr << "Page size must be a positive multiple of 4096. Please try again.\n";
+                    std::cerr << "Page size must be a positive multiple of 512. Please try again.\n";
                 }
             }
             catch (const std::invalid_argument &)
@@ -497,11 +557,37 @@ inline Settings parse_arguments(int argc, char** argv) {
         }
     }
 
+    // If user never passed --ssd-size and we didn't prompt them yet, let's prompt here
+    // if you want the user to specify it at runtime always. 
+    // (Otherwise, they'll use the default from above.)
+    if (settings.ssd_page_bytes == 0)
+    {
+        std::cout << "\nNo SSD size was provided via command line.\n";
+        std::cout << "Please enter the total SSD size in the format \"value unit\" (e.g., \"3840 GB\"): ";
+
+        // We can prompt the user. For simplicity, let's just do a single line read:
+        std::string input_line;
+        std::getline(std::cin, input_line); // read entire line
+
+        // parse the input_line
+        std::istringstream iss(input_line);
+        std::string val_str, unit_str;
+        if (!(iss >> val_str >> unit_str))
+        {
+            std::cerr << "Failed to parse input. Defaulting to 3 TB.\n";
+            settings.ssd_page_bytes = 3072ULL * 1024ULL * 1024ULL * 1024ULL;
+        }
+        else
+        {
+            settings.ssd_page_bytes = parse_ssd_size_string(val_str, unit_str);
+        }
+    }
+
     return settings;
 }
 
 // Function to print all configuration parameters
-inline void print_settings(const Settings& settings) {
+inline void print_settings(Settings& settings) {
     std::cout << "\n===== Configuration Parameters =====" << std::endl;
     std::cout << "GPU Device ID     : " << settings.device << std::endl;
     std::cout << "GPU Name          : ";
@@ -526,6 +612,21 @@ inline void print_settings(const Settings& settings) {
         std::cout << "Unknown" << std::endl;
     }
 
+    // Calculate how many 'SSD pages' are available based on user-specified ssd_page_bytes and page_size
+    settings.ssd_pages = settings.ssd_page_bytes / settings.page_size;
+
+    // Calculate total data size for the entire run
+    uint64_t total_data_size_bytes =
+        static_cast<uint64_t>(settings.num_io_requests) *
+        settings.block_size *
+        settings.num_blocks *
+        settings.page_size;
+
+    // Convert ssd_page_bytes to GB for display
+    double ssd_size_gb = static_cast<double>(settings.ssd_page_bytes) / (1024.0 * 1024.0 * 1024.0);
+    // Convert total_data_size_bytes to GB for display
+    double total_data_gb = static_cast<double>(total_data_size_bytes) / (1024.0 * 1024.0 * 1024.0);
+
     std::cout << "NVMe Controller   : " << settings.selected_controller_path << std::endl;
     std::cout << "Queue Depth       : " << settings.queue_depth << std::endl;
     std::cout << "Number of Queues  : " << settings.num_queues << std::endl;
@@ -533,8 +634,15 @@ inline void print_settings(const Settings& settings) {
     std::cout << "Number of Blocks  : " << settings.num_blocks << std::endl;
     std::cout << "Total Threads     : " << settings.block_size * settings.num_blocks << std::endl;
     std::cout << "Page Size         : " << settings.page_size << " bytes" << std::endl;
+
+    std::cout << std::fixed << std::setprecision(2);
+    std::cout << "SSD Total Size    : " << ssd_size_gb << " GB" << std::endl;
+    std::cout << "SSD Pages         : " << settings.ssd_pages << std::endl;
+
     std::cout << "IO Type           : " << (settings.io_type == READ ? "READ" : "WRITE") << std::endl;
     std::cout << "IO Method         : " << (settings.io_method == SEQUENTIAL ? "SEQUENTIAL" : "RANDOM") << std::endl;
-    std::cout << "Number of IO Req. : " << settings.num_io_requests << std::endl;
+    std::cout << "# IO per thread   : " << settings.num_io_requests << std::endl;
+    std::cout << "Total IO ops      : " << settings.num_io_requests * settings.block_size * settings.num_blocks << std::endl;
+    std::cout << "Total data size   : " << total_data_gb << " GB" << std::endl;
     std::cout << "====================================\n" << std::endl;
 }

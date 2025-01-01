@@ -1,6 +1,4 @@
-/export/home1/ltarun/bam-test/build/CMakeFiles/array_noclock.dir
-/export/home1/ltarun/bam-test/build/CMakeFiles/array_clock.dir
-/export/home1/ltarun/bam-test/build/CMakeFiles/block-test_noclock.dir
+/export/home1/ltarun/bam-test/build/CMakeFiles/block-test.dir
 /export/home1/ltarun/bam-test/build/CMakeFiles/block-test_clock.dir
 /export/home1/ltarun/bam-test/build/CMakeFiles/edit_cache.dir
 /export/home1/ltarun/bam-test/build/CMakeFiles/rebuild_cache.dir

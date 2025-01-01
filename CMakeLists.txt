@@ -53,11 +53,11 @@ function(add_bam_executables src_file)
     get_filename_component(EXEC_NAME ${src_file} NAME_WE)
 
     # Define suffixes for the two variants
-    set(SUFFIXES "noclock" "clock")
+    set(SUFFIXES "" "_clock")
 
     foreach(SUFFIX IN LISTS SUFFIXES)
         # Construct the executable name by appending the suffix
-        set(TARGET_NAME "${EXEC_NAME}_${SUFFIX}")
+        set(TARGET_NAME "${EXEC_NAME}${SUFFIX}")
 
         # Define the executable
         add_executable(${TARGET_NAME} ${src_file})
@@ -87,7 +87,7 @@ function(add_bam_executables src_file)
         )
 
         # Conditionally add the CLOCK compile definition
-        if(SUFFIX STREQUAL "clock")
+        if(SUFFIX STREQUAL "_clock")  # Updated condition
             target_compile_definitions(${TARGET_NAME} PRIVATE CLOCK)
             message(STATUS "Configured ${TARGET_NAME} with CLOCK flag.")
         else()
@@ -96,6 +96,7 @@ function(add_bam_executables src_file)
 
     endforeach()
 endfunction()
+
 
 # Loop over each source file and create executables
 foreach(SRC_FILE ${SRC_FILES})

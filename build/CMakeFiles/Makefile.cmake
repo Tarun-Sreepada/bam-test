@@ -138,9 +138,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/array_noclock.dir/DependInfo.cmake"
-  "CMakeFiles/array_clock.dir/DependInfo.cmake"
-  "CMakeFiles/block-test_noclock.dir/DependInfo.cmake"
+  "CMakeFiles/block-test.dir/DependInfo.cmake"
   "CMakeFiles/block-test_clock.dir/DependInfo.cmake"
   "external/bam/CMakeFiles/libnvm.dir/DependInfo.cmake"
   "external/bam/CMakeFiles/kernel_module.dir/DependInfo.cmake"
